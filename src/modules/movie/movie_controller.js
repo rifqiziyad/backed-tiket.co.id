@@ -7,7 +7,7 @@ module.exports = {
   },
   getAllMovie: async (req, res) => {
     try {
-      let { page, limit } = req.query
+      let { page, limit, search, sort } = req.query
       page = parseInt(page)
       limit = parseInt(limit)
       const totalData = await movieModel.getDataCount()
@@ -19,7 +19,7 @@ module.exports = {
         limit,
         totalData
       }
-      const result = await movieModel.getDataAll(limit, offset)
+      const result = await movieModel.getDataAll(limit, offset, search, sort)
       return helper.response(res, 200, 'Succes Get Data', result, pageInfo)
     } catch (error) {
       return helper.response(res, 400, 'Bad Request', error)
