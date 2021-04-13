@@ -4,20 +4,9 @@ const locationModel = require('./loc_model')
 module.exports = {
   getAllLocation: async (req, res) => {
     try {
-      let { page, limit } = req.query
-      page = parseInt(page)
-      limit = parseInt(limit)
-      const totalData = await locationModel.getDataCount()
-      const totalPage = Math.ceil(totalData / limit)
-      const offset = page * limit - limit
-      const pageInfo = {
-        page,
-        totalPage,
-        limit,
-        totalData
-      }
-      const result = await locationModel.getDataAll(limit, offset)
-      return helper.response(res, 200, 'Succes Get Data', result, pageInfo)
+      console.log('Proses get all location')
+      const result = await locationModel.getDataAll()
+      return helper.response(res, 200, 'Succes Get Data', result)
     } catch (error) {
       return helper.response(res, 400, 'Bad Request', error)
     }
@@ -41,18 +30,13 @@ module.exports = {
   postLocation: async (req, res) => {
     try {
       console.log(req.body)
-      const { locationName, locationCinema } = req.body
+      const { locationCity, locationAddress } = req.body
       const setData = {
-        location_name: locationName,
-        location_cinema: locationCinema
+        location_city: locationCity,
+        location_address: locationAddress
       }
       const result = await locationModel.createData(setData)
-      return helper.response(
-        res,
-        200,
-        'Succes Create Premiere Location',
-        result
-      )
+      return helper.response(res, 200, 'Succes Create Location', result)
     } catch (error) {
       return helper.response(res, 400, 'Bad Request', error)
     }
@@ -62,19 +46,14 @@ module.exports = {
       const { id } = req.params
       // kondisi cek data di dalam database ada berdasarkan id..
       console.log(req.body)
-      const { locationName, locationCinema } = req.body
+      const { locationCity, locationAddress } = req.body
       const setData = {
-        location_name: locationName,
-        location_cinema: locationCinema,
-        location_update_at: new Date(Date.now())
+        location_city: locationCity,
+        location_address: locationAddress,
+        location_updated_at: new Date(Date.now())
       }
       const result = await locationModel.updateData(setData, id)
-      return helper.response(
-        res,
-        200,
-        'Succes Update Premiere Location',
-        result
-      )
+      return helper.response(res, 200, 'Succes Update Location', result)
     } catch (error) {
       return helper.response(res, 400, 'Bad Request', error)
     }

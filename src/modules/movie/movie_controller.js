@@ -28,8 +28,8 @@ module.exports = {
   getMovieById: async (req, res) => {
     try {
       const { id } = req.params
+      console.log(req.params)
       const result = await movieModel.getDataById(id)
-
       // kondisi cek data di dalam database ada berdasarkan id..
       console.log(result)
       if (result.length > 0) {
@@ -84,24 +84,28 @@ module.exports = {
       console.log(result)
       // kondisi cek data di dalam database ada berdasarkan id..
       if (checkId.length > 0) {
+        // hasil response untuk delete id yg ke delete saja
         return helper.response(res, 200, 'Succes Delete Data By Id', result)
       } else {
         return helper.response(res, 404, 'Data By Id Not Found', null)
       }
-      // hasil response untuk delete id yg ke delete saja
-    } catch (error) {
-      return helper.response(res, 400, 'Bad Request', error)
-    }
-  },
-  getMovieByName: async (req, res) => {
-    try {
-      const { name } = req.query
-      const result = await movieModel.getDataByName(name)
-
-      console.log(result)
-      return helper.response(res, 200, 'Succes Get Data By Name', result)
     } catch (error) {
       return helper.response(res, 400, 'Bad Request', error)
     }
   }
+  // getMovieByName: async (req, res) => {
+  //   try {
+  //     // console.log(req.query)
+  //     const { name } = req.query
+  //     const result = await movieModel.getDataByName(name)
+  //     console.log(result)
+  //     if (name) {
+  //       return helper.response(res, 200, 'Succes Get Data By Name', result)
+  //     } else {
+  //       return helper.response(res, 404, 'Data By Name Not Found', null)
+  //     }
+  //   } catch (error) {
+  //     return helper.response(res, 400, 'Bad Request', error)
+  //   }
+  // }
 }

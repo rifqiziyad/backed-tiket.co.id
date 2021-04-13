@@ -80,16 +80,16 @@ module.exports = {
         }
       )
     })
-  },
-  getDataByName: (name) => {
-    return new Promise((resolve, reject) => {
-      connection.query(
-        'SELECT * FROM movie WHERE movie_name LIKE  "%"?"%"',
-        name,
-        (error, result) => {
-          !error ? resolve(result) : reject(new Error(error))
-        }
-      )
-    })
   }
+  // getDataByName: (name) => {
+  //   return new Promise((resolve, reject) => {
+  //     connection.query(
+  //       'SELECT * FROM movie WHERE movie_name LIKE "%?%"',
+  //       name,
+  //       (error, result) => {
+  //         !error ? resolve(result) : reject(new Error(error))
+  //       }
+  //     )
+  //   })
+  // }
 }

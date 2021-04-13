@@ -1,32 +1,18 @@
 const connection = require('../../config/mysql')
 
 module.exports = {
-  getDataAll: (limit, offset) => {
+  getDataAll: () => {
     return new Promise((resolve, reject) => {
-      connection.query(
-        'SELECT * FROM premiere_location LIMIT ? OFFSET ?',
-        [limit, offset],
-        (error, result) => {
-          console.log(error)
-          !error ? resolve(result) : reject(new Error(error))
-        }
-      )
-    })
-  },
-  getDataCount: () => {
-    return new Promise((resolve, reject) => {
-      connection.query(
-        'SELECT COUNT(*) AS total FROM premiere_location',
-        (error, result) => {
-          !error ? resolve(result[0].total) : reject(new Error(error))
-        }
-      )
+      connection.query('SELECT * FROM location', (error, result) => {
+        console.log(error)
+        !error ? resolve(result) : reject(new Error(error))
+      })
     })
   },
   getDataById: (id) => {
     return new Promise((resolve, reject) => {
       connection.query(
-        'SELECT * FROM premiere_location WHERE location_id = ?',
+        'SELECT * FROM location WHERE location_id = ?',
         id,
         (error, result) => {
           !error ? resolve(result) : reject(new Error(error))
@@ -37,7 +23,7 @@ module.exports = {
   createData: (setData) => {
     return new Promise((resolve, reject) => {
       connection.query(
-        'INSERT INTO premiere_location SET ?',
+        'INSERT INTO location SET ?',
         setData,
         (error, result) => {
           if (!error) {
@@ -56,7 +42,7 @@ module.exports = {
   updateData: (setData, id) => {
     return new Promise((resolve, reject) => {
       connection.query(
-        'UPDATE premiere_location SET ? WHERE location_id = ?',
+        'UPDATE location SET ? WHERE location_id = ?',
         [setData, id],
         (error, result) => {
           if (!error) {
@@ -75,7 +61,7 @@ module.exports = {
   deleteData: (id) => {
     return new Promise((resolve, reject) => {
       connection.query(
-        'DELETE FROM premiere_location WHERE location_id = ?',
+        'DELETE FROM location WHERE location_id = ?',
         id,
         (error, result) => {
           !error ? resolve(result) : reject(new Error(error))
