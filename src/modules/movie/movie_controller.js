@@ -60,13 +60,13 @@ module.exports = {
     try {
       const { id } = req.params
       // kondisi cek data di dalam database ada berdasarkan id..
-      console.log(req.body)
+      // console.log(req.body)
       const { movieName, movieCategory, movieReleaseDate } = req.body
       const setData = {
         movie_name: movieName,
         movie_category: movieCategory,
         movie_release_date: movieReleaseDate,
-        movie_update_at: new Date(Date.now())
+        movie_updated_at: new Date(Date.now())
       }
       const result = await movieModel.updateData(setData, id)
       return helper.response(res, 200, 'Succes Update Movie', result)
@@ -93,19 +93,4 @@ module.exports = {
       return helper.response(res, 400, 'Bad Request', error)
     }
   }
-  // getMovieByName: async (req, res) => {
-  //   try {
-  //     // console.log(req.query)
-  //     const { name } = req.query
-  //     const result = await movieModel.getDataByName(name)
-  //     console.log(result)
-  //     if (name) {
-  //       return helper.response(res, 200, 'Succes Get Data By Name', result)
-  //     } else {
-  //       return helper.response(res, 404, 'Data By Name Not Found', null)
-  //     }
-  //   } catch (error) {
-  //     return helper.response(res, 400, 'Bad Request', error)
-  //   }
-  // }
 }
