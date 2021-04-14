@@ -4,6 +4,8 @@ const movieRouter = require('../modules/movie/movie_routes')
 const locationRouter = require('../modules/location/loc_routes')
 const premiereRouter = require('../modules/premiere/premiere_routes')
 const timeRouter = require('../modules/show time/time_routes')
+const seatRouter = require('../modules/booking_seat/seat_routes')
+const bookingRouter = require('../modules/booking/booking_routes')
 
 // [1]
 // Route.get('/hello', (req, res) => {
@@ -15,5 +17,7 @@ Route.use('/movie', movieRouter)
 Route.use('/location', locationRouter)
 Route.use('/premiere', premiereRouter)
 Route.use('/time', timeRouter)
+Route.use('/seat', seatRouter)
+Route.use('/booking', bookingRouter)
 
 module.exports = Route
