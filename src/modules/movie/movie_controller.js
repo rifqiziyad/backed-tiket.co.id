@@ -11,8 +11,14 @@ module.exports = {
       page = parseInt(page)
       limit = parseInt(limit)
       const totalData = await movieModel.getDataCount()
+      console.log(totalData)
       const totalPage = Math.ceil(totalData / limit)
       const offset = page * limit - limit
+      // if (totalData > limit) {
+      //   totalData = limit
+      // } else {
+      //   totalData
+      // }
       const pageInfo = {
         page,
         totalPage,
@@ -43,12 +49,25 @@ module.exports = {
   },
   postMovie: async (req, res) => {
     try {
-      console.log(req.body)
-      const { movieName, movieCategory, movieReleaseDate } = req.body
+      const {
+        movieName,
+        movieDirector,
+        movieReleaseDate,
+        movieCategory,
+        movieCasts,
+        durationHour,
+        durationMinute,
+        movieSynopsis
+      } = req.body
       const setData = {
         movie_name: movieName,
+        movie_release_date: movieReleaseDate,
         movie_category: movieCategory,
-        movie_release_date: movieReleaseDate
+        directed: movieDirector,
+        casts: movieCasts,
+        duration_hour: durationHour,
+        duration_minute: durationMinute,
+        synopsis: movieSynopsis
       }
       const result = await movieModel.createData(setData)
       return helper.response(res, 200, 'Succes Create Movie', result)
@@ -68,8 +87,14 @@ module.exports = {
         movie_release_date: movieReleaseDate,
         movie_updated_at: new Date(Date.now())
       }
+      const checkId = await movieModel.getDataById(id)
       const result = await movieModel.updateData(setData, id)
-      return helper.response(res, 200, 'Succes Update Movie', result)
+      if (checkId.length > 0) {
+        // hasil response untuk delete id yg ke delete saja
+        return helper.response(res, 200, 'Succes Update Data By Id', result)
+      } else {
+        return helper.response(res, 404, `Data By Id ${id} Not Found`, null)
+      }
     } catch (error) {
       return helper.response(res, 400, 'Bad Request', error)
     }

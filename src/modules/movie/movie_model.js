@@ -46,7 +46,8 @@ module.exports = {
           }
           resolve(newResult)
         } else {
-          reject(new Error(error))
+          console.log(error)
+          // reject(new Error(error))
         }
       })
     })
