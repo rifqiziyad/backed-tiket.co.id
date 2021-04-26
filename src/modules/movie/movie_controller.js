@@ -80,17 +80,30 @@ module.exports = {
       const { id } = req.params
       // kondisi cek data di dalam database ada berdasarkan id..
       // console.log(req.body)
-      const { movieName, movieCategory, movieReleaseDate } = req.body
+      const {
+        movieName,
+        movieDirector,
+        movieReleaseDate,
+        movieCategory,
+        movieCasts,
+        durationHour,
+        durationMinute,
+        movieSynopsis
+      } = req.body
       const setData = {
         movie_name: movieName,
         movie_category: movieCategory,
         movie_release_date: movieReleaseDate,
+        casts: movieCasts,
+        duration_hour: durationHour,
+        duration_minute: durationMinute,
+        synopsis: movieSynopsis,
+        directed: movieDirector,
         movie_updated_at: new Date(Date.now())
       }
       const checkId = await movieModel.getDataById(id)
       const result = await movieModel.updateData(setData, id)
       if (checkId.length > 0) {
-        // hasil response untuk delete id yg ke delete saja
         return helper.response(res, 200, 'Succes Update Data By Id', result)
       } else {
         return helper.response(res, 404, `Data By Id ${id} Not Found`, null)
