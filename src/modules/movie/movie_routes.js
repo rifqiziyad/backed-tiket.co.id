@@ -35,6 +35,7 @@ Route.post(
 )
 Route.patch(
   '/:id',
+  uploadFile,
   redisMiddleware.clearDataMovieRedis,
   movieController.updateMovie
 )

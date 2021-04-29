@@ -2,6 +2,7 @@ const helper = require('../../helpers/wrapper')
 const movieModel = require('./movie_model')
 const redis = require('redis')
 const client = redis.createClient()
+const fs = require('fs')
 
 module.exports = {
   sayHello: (req, res) => {
@@ -47,7 +48,12 @@ module.exports = {
       console.log(result)
       if (result.length > 0) {
         client.set(`getmovie:${id}`, JSON.stringify(result))
-        return helper.response(res, 200, 'Succes Get Data By Id', result)
+        return helper.response(
+          res,
+          200,
+          `Succes Get Data By Id = ${id}`,
+          result
+        )
       } else {
         return helper.response(res, 404, 'Data By Id Not Found', null)
       }
@@ -109,12 +115,29 @@ module.exports = {
         duration_minute: durationMinute,
         synopsis: movieSynopsis,
         directed: movieDirector,
+        movie_image: req.file ? req.file.filename : '',
         movie_updated_at: new Date(Date.now())
       }
       const checkId = await movieModel.getDataById(id)
       const result = await movieModel.updateData(setData, id)
       if (checkId.length > 0) {
-        return helper.response(res, 200, 'Succes Update Data By Id', result)
+        client.set(`getmovie:${id}`, JSON.stringify(result))
+        fs.stat(`src/uploads/${checkId[0].movie_image}`, function (err, stats) {
+          console.log(stats) // here we got all information of file in stats variable
+          if (err) {
+            return console.error(err)
+          }
+          fs.unlink(`src/uploads/${checkId[0].movie_image}`, function (err) {
+            if (err) return console.log(err)
+            console.log('file deleted successfully')
+          })
+        })
+        return helper.response(
+          res,
+          200,
+          `Succes Update Data By Id: ${id}`,
+          result
+        )
       } else {
         return helper.response(res, 404, `Data By Id ${id} Not Found`, null)
       }
@@ -130,11 +153,20 @@ module.exports = {
       const { id } = req.params
       const checkId = await movieModel.getDataById(id)
       const result = await movieModel.deleteData(id)
-      // console.log(result)
+      console.log(checkId[0].movie_image)
       // kondisi cek data di dalam database ada berdasarkan id..
       if (checkId.length > 0) {
-        console.log(result)
         console.log(`Delete data by id = ${id}`)
+        fs.stat(`src/uploads/${checkId[0].movie_image}`, function (err, stats) {
+          console.log(stats) // here we got all information of file in stats variable
+          if (err) {
+            return console.error(err)
+          }
+          fs.unlink(`src/uploads/${checkId[0].movie_image}`, function (err) {
+            if (err) return console.log(err)
+            console.log('file deleted successfully')
+          })
+        })
         // hasil response untuk delete id yg ke delete saja
         return helper.response(
           res,

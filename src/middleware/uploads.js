@@ -9,6 +9,10 @@ const storage = multer.diskStorage({
   filename: function (req, file, cb) {
     // console.log(file)
     cb(null, new Date().toISOString().replace(/:/g, '-') + file.originalname)
+  },
+  limits: {
+    files: 1,
+    fileSize: 1024 * 1024
   }
 })
 
@@ -24,7 +28,10 @@ const fileFilter = (req, file, cb) => {
 
 // tambahkan limit condition
 
-const upload = multer({ storage, fileFilter }).single('movieImage')
+const upload = multer({
+  storage,
+  fileFilter
+}).single('movieImage')
 
 const uploadFilter = (req, res, next) => {
   upload(req, res, function (err) {
