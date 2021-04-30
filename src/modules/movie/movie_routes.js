@@ -7,7 +7,7 @@ const movieController = require('./movie_controller')
 const authMiddleware = require('../../middleware/auth')
 const uploadFile = require('../../middleware/uploads')
 // ==========================
-const redisMiddleware = require('../../middleware/redis')
+const redisMiddleware = require('../../middleware/redisMovie')
 // ==========================
 // 1
 // Route.get('/hello', sayHello)

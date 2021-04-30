@@ -26,6 +26,7 @@ module.exports = {
         'INSERT INTO premiere SET ?',
         setData,
         (error, result) => {
+          // console.log(error.message)
           if (!error) {
             const newResult = {
               id: result.insertId,

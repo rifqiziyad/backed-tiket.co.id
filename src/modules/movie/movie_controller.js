@@ -14,14 +14,10 @@ module.exports = {
       page = parseInt(page)
       limit = parseInt(limit)
       const totalData = await movieModel.getDataCount()
-      console.log(totalData)
+      // console.log(totalData)
       const totalPage = Math.ceil(totalData / limit)
       const offset = page * limit - limit
-      // if (totalData > limit) {
-      //   totalData = limit
-      // } else {
-      //   totalData
-      // }
+
       const pageInfo = {
         page,
         totalPage,

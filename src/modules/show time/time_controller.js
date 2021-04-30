@@ -1,10 +1,17 @@
 const helper = require('../../helpers/wrapper')
 const timeModel = require('./time_model')
+const redis = require('redis')
+const client = redis.createClient()
 
 module.exports = {
   getAllTime: async (req, res) => {
     try {
       const result = await timeModel.getDataAll()
+      client.setex(
+        `getshowtime:${JSON.stringify(req.query)}`,
+        3600,
+        JSON.stringify(result)
+      )
       return helper.response(res, 200, 'Succes Get Data', result)
     } catch (error) {
       return helper.response(res, 400, 'Bad Request', error)
@@ -18,6 +25,7 @@ module.exports = {
       // kondisi cek data di dalam database ada berdasarkan id..
       console.log(result)
       if (result.length > 0) {
+        client.set(`getshowtime:${id}`, JSON.stringify(result))
         return helper.response(res, 200, 'Succes Get Data By Id', result)
       } else {
         return helper.response(res, 404, 'Data By Id Not Found', null)

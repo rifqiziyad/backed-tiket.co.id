@@ -1,11 +1,18 @@
 const helper = require('../../helpers/wrapper')
 const locationModel = require('./loc_model')
+const redis = require('redis')
+const client = redis.createClient()
 
 module.exports = {
   getAllLocation: async (req, res) => {
     try {
       console.log('Proses get all location')
       const result = await locationModel.getDataAll()
+      client.setex(
+        `getlocation:${JSON.stringify(req.query)}`,
+        3600,
+        JSON.stringify(result)
+      )
       return helper.response(res, 200, 'Succes Get Data', result)
     } catch (error) {
       return helper.response(res, 400, 'Bad Request', error)
@@ -19,6 +26,7 @@ module.exports = {
       // kondisi cek data di dalam database ada berdasarkan id..
       console.log(result)
       if (result.length > 0) {
+        client.set(`getlocation:${id}`, JSON.stringify(result))
         return helper.response(res, 200, 'Succes Get Data By Id', result)
       } else {
         return helper.response(res, 404, 'Data By Id Not Found', null)

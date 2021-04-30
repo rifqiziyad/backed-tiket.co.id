@@ -11,19 +11,25 @@ module.exports = {
       const encryptPassword = bcrypt.hashSync(userPassword, salt)
       console.log(`before Encript = ${userPassword}`)
       console.log(`after Encript = ${encryptPassword}`)
-
+      const getDataConditions = await authModel.getDataConditions({
+        user_email: userEmail
+      })
       const setData = {
         user_name: userName,
         user_email: userEmail,
         user_password: encryptPassword
       }
       // kondisi cek email apakah ada di dalam database ?
-      // jika ada response gagal msg = email sudah terdaftar
-      // jika tidak ada = menjalankan proses model register user
-      const result = await authModel.register(setData)
-      console.log(result)
-      delete result.user_password
-      return helper.response(res, 200, 'Succes Register User', result)
+      if (getDataConditions.length <= 0) {
+        // jika tidak ada, menjalankan proses model register user
+        const result = await authModel.register(setData)
+        console.log(result)
+        delete result.user_password
+        return helper.response(res, 200, 'Succes Register User', result)
+      } else {
+        // jika ada response gagal msg = email sudah terdaftar
+        return helper.response(res, 404, `${userEmail} Registered`)
+      }
     } catch (error) {
       return helper.response(res, 400, 'Bad Request', error)
     }
