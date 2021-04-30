@@ -35,12 +35,14 @@ Route.post(
 )
 Route.patch(
   '/:id',
+  authMiddleware.isAdmin,
   uploadFile,
   redisMiddleware.clearDataMovieRedis,
   movieController.updateMovie
 )
 Route.delete(
   '/:id',
+  authMiddleware.isAdmin,
   redisMiddleware.clearDataMovieRedis,
   movieController.deleteMovie
 )

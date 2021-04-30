@@ -6,6 +6,8 @@ const premiereRouter = require('../modules/premiere/premiere_routes')
 const timeRouter = require('../modules/show time/time_routes')
 const bookingRouter = require('../modules/booking/booking_routes')
 const authRouter = require('../modules/auth/auth_routes')
+const userRouter = require('../modules/user/user_routes')
+const profileRouter = require('../modules/Profile/profile_routes')
 
 // [1]
 // Route.get('/hello', (req, res) => {
@@ -19,5 +21,7 @@ Route.use('/premiere', premiereRouter)
 Route.use('/time', timeRouter)
 Route.use('/booking', bookingRouter)
 Route.use('/auth', authRouter)
+Route.use('/user', userRouter)
+Route.use('/profile', profileRouter)
 
 module.exports = Route

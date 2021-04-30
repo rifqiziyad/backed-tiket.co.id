@@ -2,9 +2,11 @@ const helper = require('../../helpers/wrapper')
 const bcrypt = require('bcrypt')
 const authModel = require('./auth_model')
 const jwt = require('jsonwebtoken')
+const nodemailer = require('nodemailer')
+require('dotenv').config()
 
 module.exports = {
-  register: async (req, res) => {
+  register: async (req, res, next) => {
     try {
       const { userEmail, userPassword, userName } = req.body
       const salt = bcrypt.genSaltSync(10)
@@ -22,10 +24,39 @@ module.exports = {
       // kondisi cek email apakah ada di dalam database ?
       if (getDataConditions.length <= 0) {
         // jika tidak ada, menjalankan proses model register user
+        console.log(process.env.SMTP_EMAIL)
+        const transporter = nodemailer.createTransport({
+          host: 'smtp.gmail.com',
+          port: 587,
+          secure: false, // true for 465, false for other ports
+          auth: {
+            user: process.env.SMTP_EMAIL, // generated ethereal user
+            pass: process.env.SMTP_PASSWORD // generated ethereal password
+          }
+        })
+        const mailOptions = {
+          from: '"Sans 😂👌" <rifqiziyad4@gmail.com>', // sender address
+          to: userEmail, // list of receivers
+          subject: 'Ticket Sans - Activation Email', // Subject line
+          html:
+            "<b>Click Here to activate </b><a href='http://localhost:3001/api/v1/movie?page=1&limit=100&search=&sort=movie_id%20ASC'>Click !</>" // html body
+        }
+
+        await transporter.sendMail(mailOptions, function (error, info) {
+          if (error) {
+            console.log(error)
+            return helper.response(res, 400, 'Email not send !')
+          } else {
+            console.log('Email sent:' + info.response)
+            return helper.response(res, 200, 'Success Register User')
+          }
+        })
+
         const result = await authModel.register(setData)
         console.log(result)
         delete result.user_password
         return helper.response(res, 200, 'Succes Register User', result)
+        // next()
       } else {
         // jika ada response gagal msg = email sudah terdaftar
         return helper.response(res, 404, `${userEmail} Registered`)
