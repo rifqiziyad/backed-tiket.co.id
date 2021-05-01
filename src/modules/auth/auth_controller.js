@@ -39,7 +39,7 @@ module.exports = {
           to: userEmail, // list of receivers
           subject: 'Ticket Sans - Activation Email', // Subject line
           html:
-            "<b>Click Here to activate </b><a href='http://localhost:3001/api/v1/movie?page=1&limit=100&search=&sort=movie_id%20ASC'>Click !</>" // html body
+            "<b>Click Here to activate </b><a href='https://www.google.com/'>Click !</>" // html body
         }
 
         await transporter.sendMail(mailOptions, function (error, info) {
@@ -93,6 +93,25 @@ module.exports = {
       } else {
         return helper.response(res, 404, 'Email / Account not registed')
       }
+    } catch (error) {
+      return helper.response(res, 400, 'Bad Request', error)
+    }
+  },
+  changeUserStatus: async (res, req) => {
+    try {
+      const { id } = req.params
+      const setData = {
+        user_status: 100
+      }
+      const result = await authModel.updateData(setData, id)
+      const getUserId = await authModel.getDataById(id)
+      console.log(getUserId)
+      console.log(result)
+      //     if (getUserId.length > 0) {
+      //       console.log(getUserId)
+      //     } else {
+      //       console.log(setData)
+      //     }
     } catch (error) {
       return helper.response(res, 400, 'Bad Request', error)
     }
