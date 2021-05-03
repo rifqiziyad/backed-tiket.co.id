@@ -25,13 +25,13 @@ module.exports = {
   },
   isAdmin: (req, res, next) => {
     console.log('middleware isAdmin running !')
-    console.log(req.decodeToken)
+    const checkUserRole = req.decodeToken.user_role
+    console.log(checkUserRole)
     // check kondisi apakah user admin atau bukan ?
-    // if (conditioncheckuserrole apakah admin ?) { // req.decodeToken.user_role === ?
-    //   next()
-    // } else {
-    //   mengembalikan respone bahwa endpoin ini tidak bisa diakses selain admin
-    // }
-    next()
+    if (checkUserRole === 1) {
+      next()
+    } else {
+      return helper.response(res, 404, 'Only Admin Can Access')
+    }
   }
 }

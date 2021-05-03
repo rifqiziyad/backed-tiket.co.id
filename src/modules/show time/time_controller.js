@@ -17,6 +17,14 @@ module.exports = {
       return helper.response(res, 400, 'Bad Request', error)
     }
   },
+  getDataSchedule: async (req, res) => {
+    try {
+      const result = await timeModel.getDataSchedule()
+      return helper.response(res, 200, 'Succes Get Data Schedule', result)
+    } catch (error) {
+      return helper.response(res, 400, 'Bad Request', error)
+    }
+  },
   getTimeById: async (req, res) => {
     try {
       const { id } = req.params

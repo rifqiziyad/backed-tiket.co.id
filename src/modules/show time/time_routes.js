@@ -12,6 +12,12 @@ Route.get(
   timeController.getAllTime
 )
 Route.get(
+  '/schedule',
+  authMiddleware.authentication,
+  // redisMiddleware.getShowTimeRedis,
+  timeController.getDataSchedule
+)
+Route.get(
   '/:id',
   redisMiddleware.getShowTimeByIdRedis,
   timeController.getTimeById

@@ -9,6 +9,17 @@ module.exports = {
       })
     })
   },
+  getDataSchedule: () => {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        'SELECT * FROM show_time JOIN premiere ON show_time.show_time_id = premiere.premiere_id',
+        (error, result) => {
+          console.log(error)
+          !error ? resolve(result) : reject(new Error(error))
+        }
+      )
+    })
+  },
   getDataById: (id) => {
     return new Promise((resolve, reject) => {
       connection.query(

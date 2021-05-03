@@ -6,7 +6,7 @@ const nodemailer = require('nodemailer')
 require('dotenv').config()
 
 module.exports = {
-  register: async (req, res, next) => {
+  register: async (req, res) => {
     try {
       const { userEmail, userPassword, userName } = req.body
       const salt = bcrypt.genSaltSync(10)
@@ -21,6 +21,7 @@ module.exports = {
         user_email: userEmail,
         user_password: encryptPassword
       }
+      console.log(getDataConditions)
       // kondisi cek email apakah ada di dalam database ?
       if (getDataConditions.length <= 0) {
         // jika tidak ada, menjalankan proses model register user
@@ -34,13 +35,14 @@ module.exports = {
             pass: process.env.SMTP_PASSWORD // generated ethereal password
           }
         })
+        const result = await authModel.register(setData)
         const mailOptions = {
           from: '"Sans 😂👌" <rifqiziyad4@gmail.com>', // sender address
           to: userEmail, // list of receivers
           subject: 'Ticket Sans - Activation Email', // Subject line
-          html:
-            "<b>Click Here to activate </b><a href='https://www.google.com/'>Click !</>" // html body
+          html: `<b>Click Here to activate </b><a href='http://localhost:3001/api/v1/user/${result.id}'>Click !</>` // html body
         }
+        console.log(mailOptions.html)
 
         await transporter.sendMail(mailOptions, function (error, info) {
           if (error) {
@@ -48,15 +50,13 @@ module.exports = {
             return helper.response(res, 400, 'Email not send !')
           } else {
             console.log('Email sent:' + info.response)
-            return helper.response(res, 200, 'Success Register User')
+            return helper.response(res, 200, 'Check Your Email')
           }
         })
 
-        const result = await authModel.register(setData)
         console.log(result)
         delete result.user_password
-        return helper.response(res, 200, 'Succes Register User', result)
-        // next()
+        return helper.response(res, 200, 'Success Verification Email', result)
       } else {
         // jika ada response gagal msg = email sudah terdaftar
         return helper.response(res, 404, `${userEmail} Registered`)
@@ -97,7 +97,7 @@ module.exports = {
       return helper.response(res, 400, 'Bad Request', error)
     }
   },
-  changeUserStatus: async (res, req) => {
+  changeUserStatus: async (req, res) => {
     try {
       const { id } = req.params
       const setData = {
@@ -107,11 +107,16 @@ module.exports = {
       const getUserId = await authModel.getDataById(id)
       console.log(getUserId)
       console.log(result)
-      //     if (getUserId.length > 0) {
-      //       console.log(getUserId)
-      //     } else {
-      //       console.log(setData)
-      //     }
+      if (getUserId.length > 0) {
+        return helper.response(
+          res,
+          200,
+          `Succes Update Data By Id: ${id}`,
+          result
+        )
+      } else {
+        return helper.response(res, 404, `Data By Id ${id} Not Found`, null)
+      }
     } catch (error) {
       return helper.response(res, 400, 'Bad Request', error)
     }

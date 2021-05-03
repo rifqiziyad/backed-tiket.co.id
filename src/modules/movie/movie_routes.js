@@ -17,6 +17,7 @@ Route.get('/hello', movieController.sayHello)
 Route.get(
   '/',
   authMiddleware.authentication,
+  authMiddleware.isAdmin,
   redisMiddleware.getMovieRedis,
   movieController.getAllMovie
 )
@@ -35,6 +36,7 @@ Route.post(
 )
 Route.patch(
   '/:id',
+  authMiddleware.authentication,
   authMiddleware.isAdmin,
   uploadFile,
   redisMiddleware.clearDataMovieRedis,
@@ -42,6 +44,7 @@ Route.patch(
 )
 Route.delete(
   '/:id',
+  authMiddleware.authentication,
   authMiddleware.isAdmin,
   redisMiddleware.clearDataMovieRedis,
   movieController.deleteMovie
