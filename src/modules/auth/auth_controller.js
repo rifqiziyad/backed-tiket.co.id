@@ -40,8 +40,11 @@ module.exports = {
           from: '"Sans 😂👌" <rifqiziyad4@gmail.com>', // sender address
           to: userEmail, // list of receivers
           subject: 'Ticket Sans - Activation Email', // Subject line
-          html: `<b>Click Here to activate </b><a href='http://localhost:3001/api/v1/user/${result.id}'>Click !</>` // html body
+          html: `<b>Click Here to activate </b><form action='http://localhost:3001/api/v1/user/patch/${result.id}' method="post">
+          <button type="submit" name="your_name" value="your_value">Go</button>
+      </form>` // html body
         }
+
         console.log(mailOptions.html)
 
         await transporter.sendMail(mailOptions, function (error, info) {
@@ -50,13 +53,13 @@ module.exports = {
             return helper.response(res, 400, 'Email not send !')
           } else {
             console.log('Email sent:' + info.response)
-            return helper.response(res, 200, 'Check Your Email')
+            return helper.response(res, 200, 'Check Your Email', result)
           }
         })
 
         console.log(result)
-        delete result.user_password
-        return helper.response(res, 200, 'Success Verification Email', result)
+        // delete result.user_password
+        // return helper.response(res, 200, 'Success Verification Email', result)
       } else {
         // jika ada response gagal msg = email sudah terdaftar
         return helper.response(res, 404, `${userEmail} Registered`)
@@ -92,30 +95,6 @@ module.exports = {
         }
       } else {
         return helper.response(res, 404, 'Email / Account not registed')
-      }
-    } catch (error) {
-      return helper.response(res, 400, 'Bad Request', error)
-    }
-  },
-  changeUserStatus: async (req, res) => {
-    try {
-      const { id } = req.params
-      const setData = {
-        user_status: 100
-      }
-      const result = await authModel.updateData(setData, id)
-      const getUserId = await authModel.getDataById(id)
-      console.log(getUserId)
-      console.log(result)
-      if (getUserId.length > 0) {
-        return helper.response(
-          res,
-          200,
-          `Succes Update Data By Id: ${id}`,
-          result
-        )
-      } else {
-        return helper.response(res, 404, `Data By Id ${id} Not Found`, null)
       }
     } catch (error) {
       return helper.response(res, 400, 'Bad Request', error)
