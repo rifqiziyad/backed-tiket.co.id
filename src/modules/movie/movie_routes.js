@@ -8,19 +8,14 @@ const authMiddleware = require('../../middleware/auth')
 const uploadFile = require('../../middleware/uploads')
 // ==========================
 const redisMiddleware = require('../../middleware/redisMovie')
+// const { isAdmin } = require('../../middleware/auth')
 // ==========================
 // 1
 // Route.get('/hello', sayHello)
 
 // 2
 Route.get('/hello', movieController.sayHello)
-Route.get(
-  '/',
-  authMiddleware.authentication,
-  authMiddleware.isAdmin,
-  redisMiddleware.getMovieRedis,
-  movieController.getAllMovie
-)
+Route.get('/', redisMiddleware.getMovieRedis, movieController.getAllMovie)
 Route.get(
   '/:id',
   redisMiddleware.getMovieByIdRedis,
