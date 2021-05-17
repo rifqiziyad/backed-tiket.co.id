@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 17, 2021 at 07:06 AM
+-- Generation Time: May 17, 2021 at 09:51 AM
 -- Server version: 10.4.18-MariaDB
 -- PHP Version: 7.3.27
 
@@ -239,7 +239,7 @@ CREATE TABLE `show_time` (
   `show_time_id` int(11) NOT NULL,
   `premiere_id` int(11) NOT NULL,
   `show_time_date` date NOT NULL,
-  `show_time_clock` time NOT NULL DEFAULT current_timestamp(),
+  `show_time_clock` time NOT NULL,
   `show_time_created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `show_time_updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
