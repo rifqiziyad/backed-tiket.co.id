@@ -7,6 +7,7 @@ const redisMiddleware = require('../../middleware/redisProfile')
 
 Route.get(
   '/:id',
+  authMiddleware.authentication,
   redisMiddleware.getProfileByIdRedis,
   profileController.getProfileId
 )

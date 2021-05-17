@@ -5,9 +5,10 @@ const helmet = require('helmet')
 const compression = require('compression')
 const bodyParser = require('body-parser')
 const routerNavigation = require('./routes/')
+require('dotenv').config()
 
 const app = express()
-const port = 3001
+const port = process.env.DB_PORT
 
 app.use(morgan('dev'))
 app.use(cors())
@@ -19,8 +20,8 @@ app.use(bodyParser.urlencoded({ extended: false }))
 
 // parse application/json
 app.use(bodyParser.json())
-app.use('/api/v1', routerNavigation)
-app.use('/api', express.static('src/uploads'))
+app.use('/backend1/api/v1', routerNavigation)
+app.use('/backend1/api', express.static('src/uploads'))
 
 // app.post('/movie', (req, res) => {
 //   console.log('Post Movie Works !')
