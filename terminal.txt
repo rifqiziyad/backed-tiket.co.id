@@ -1,6 +1,4 @@
 cara run = npm run dev
 
-
-1. table location premiere di admin page
-2. table schedule di movie details
+untuk deploy AWS = pm2 start src/index.js 
 
