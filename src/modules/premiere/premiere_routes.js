@@ -14,6 +14,7 @@ Route.get(
 )
 Route.get(
   '/:id',
+  authMiddleware.authentication,
   redisMiddleware.getPremiereByIdRedis,
   premiereController.getPremiereById
 )
@@ -22,7 +23,6 @@ Route.post(
   authMiddleware.authentication,
   authMiddleware.isAdmin,
   uploadFile,
-  redisMiddleware.clearDataPremiereRedis,
   premiereController.postPremiere
 )
 Route.patch(

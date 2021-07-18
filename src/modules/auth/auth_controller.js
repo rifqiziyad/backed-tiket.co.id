@@ -11,8 +11,6 @@ module.exports = {
       const { userEmail, userPassword, userName } = req.body
       const salt = bcrypt.genSaltSync(10)
       const encryptPassword = bcrypt.hashSync(userPassword, salt)
-      console.log(`before Encript = ${userPassword}`)
-      console.log(`after Encript = ${encryptPassword}`)
       const getDataConditions = await authModel.getDataConditions({
         user_email: userEmail
       })
@@ -21,11 +19,10 @@ module.exports = {
         user_email: userEmail,
         user_password: encryptPassword
       }
-      console.log(getDataConditions)
       // kondisi cek email apakah ada di dalam database ?
       if (getDataConditions.length <= 0) {
         // jika tidak ada, menjalankan proses model register user
-        console.log(process.env.SMTP_EMAIL)
+
         const transporter = nodemailer.createTransport({
           host: 'smtp.gmail.com',
           port: 587,
@@ -40,12 +37,8 @@ module.exports = {
           from: '"Sans 😂👌" <rifqiziyad4@gmail.com>', // sender address
           to: userEmail, // list of receivers
           subject: 'Ticket Sans - Activation Email', // Subject line
-          html: `<b>Click Here to activate </b><form action='http://localhost:3001/api/v1/user/patch/${result.id}' method="post">
-          <button type="submit" name="your_name" value="your_value">Go</button>
-      </form>` // html body
+          html: `<b>Click Here to activate account </b><a href='http://localhost:3001/backend1/api/v1/user/patch/${result.id}'>Click here !</a>` // html body
         }
-
-        console.log(mailOptions.html)
 
         await transporter.sendMail(mailOptions, function (error, info) {
           if (error) {
@@ -53,13 +46,16 @@ module.exports = {
             return helper.response(res, 400, 'Email not send !')
           } else {
             console.log('Email sent:' + info.response)
-            return helper.response(res, 200, 'Check Your Email', result)
           }
         })
 
-        console.log(result)
-        // delete result.user_password
-        // return helper.response(res, 200, 'Success Verification Email', result)
+        delete result.user_password
+        return helper.response(
+          res,
+          200,
+          'Success register account \n check your email for verification',
+          result
+        )
       } else {
         // jika ada response gagal msg = email sudah terdaftar
         return helper.response(res, 404, `${userEmail} Registered`)
@@ -94,9 +90,10 @@ module.exports = {
           return helper.response(res, 404, 'Wrong password')
         }
       } else {
-        return helper.response(res, 404, 'Email / Account not registed')
+        return helper.response(res, 404, 'Email / Account not registered')
       }
     } catch (error) {
+      console.log(error)
       return helper.response(res, 400, 'Bad Request', error)
     }
   }

@@ -9,35 +9,30 @@ const storage = multer.diskStorage({
   filename: function (req, file, cb) {
     // console.log(file)
     cb(null, new Date().toISOString().replace(/:/g, '-') + file.originalname)
-  },
-  limits: {
-    files: 1,
-    fileSize: 1024 * 1024
   }
 })
 
-const fileFilter = (req, file, cb) => {
-  const listExt = ['.jpg', '.png', 'jpeg']
+const fileFilter = (req, file, callback) => {
+  const listExt = ['.jpg', '.png']
   const ext = path.extname(file.originalname).toLowerCase()
   if (listExt.includes(ext)) {
-    cb(null, true)
+    callback(null, true)
   } else {
-    cb(new Error('Extention file must be jpg/png/jpeg'), false)
+    callback(new Error('EXT must be jpg/png !'), false)
   }
 }
 
 const upload = multer({
-  storage,
-  fileFilter
-}).single('dataImage')
+  storage: storage,
+  fileFilter: fileFilter,
+  limits: { fileSize: 600 * 600 }
+}).single('image')
 
 const uploadFilter = (req, res, next) => {
   upload(req, res, function (err) {
     if (err instanceof multer.MulterError) {
-      // A Multer error occurred when uploading.
       return helper.response(res, 401, err.message, null)
     } else if (err) {
-      // An unknown error occurred when uploading.
       return helper.response(res, 401, err.message, null)
     }
     next()

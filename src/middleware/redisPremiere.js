@@ -26,7 +26,6 @@ module.exports = {
       if (!error && result != null) {
         console.log('Premiere data is in redis')
         const newResult = JSON.parse(result)
-        console.log(newResult)
         return helper.response(res, 200, 'Succes Get Movie', newResult)
       } else {
         console.log('Premiere data does not exist in redis')

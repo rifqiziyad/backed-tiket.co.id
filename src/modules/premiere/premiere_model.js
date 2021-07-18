@@ -3,10 +3,13 @@ const connection = require('../../config/mysql')
 module.exports = {
   getDataAll: () => {
     return new Promise((resolve, reject) => {
-      connection.query('SELECT * FROM premiere', (error, result) => {
-        console.log(error)
-        !error ? resolve(result) : reject(new Error(error))
-      })
+      connection.query(
+        'SELECT * FROM premiere JOIN location ON premiere.location_id = location.location_id',
+        (error, result) => {
+          console.log(error)
+          !error ? resolve(result) : reject(new Error(error))
+        }
+      )
     })
   },
   getDataById: (id) => {
@@ -63,6 +66,17 @@ module.exports = {
     return new Promise((resolve, reject) => {
       connection.query(
         'DELETE FROM premiere WHERE premiere_id = ?',
+        id,
+        (error, result) => {
+          !error ? resolve(result) : reject(new Error(error))
+        }
+      )
+    })
+  },
+  getShowTimeData: (id) => {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        'SELECT * FROM show_time WHERE premiere_id = ?',
         id,
         (error, result) => {
           !error ? resolve(result) : reject(new Error(error))

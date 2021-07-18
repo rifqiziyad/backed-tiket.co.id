@@ -24,16 +24,10 @@ module.exports = {
       const setData = {
         user_status: 100
       }
-      const result = await userModel.updateData(setData, id)
+      await userModel.updateData(setData, id)
       const getUserId = await userModel.getDataById(id)
       if (getUserId.length > 0) {
-        console.log(setData)
-        return helper.response(
-          res,
-          200,
-          `Succes Update User Data By Id:${id}`,
-          result
-        )
+        return helper.response(res, 200, `Succes Update User Data By Id:${id}`)
       } else {
         return helper.response(res, 404, `Data By Id ${id} Not Found`, null)
       }

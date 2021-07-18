@@ -41,7 +41,6 @@ module.exports = {
       console.log(req.params)
       const result = await movieModel.getDataById(id)
       // kondisi cek data di dalam database ada berdasarkan id..
-      console.log(result)
       if (result.length > 0) {
         client.set(`getmovie:${id}`, JSON.stringify(result))
         return helper.response(
@@ -80,7 +79,6 @@ module.exports = {
         synopsis: movieSynopsis,
         movie_image: req.file ? req.file.filename : ''
       }
-      console.log(setData)
       const result = await movieModel.createData(setData)
       return helper.response(res, 200, 'Succes Create Movie', result)
     } catch (error) {

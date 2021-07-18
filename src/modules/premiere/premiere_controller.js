@@ -8,12 +8,17 @@ module.exports = {
   getAllPremiere: async (req, res) => {
     try {
       const result = await premiereModel.getDataAll()
-      console.log(result)
+
+      for (const value of result) {
+        value.show_time = await premiereModel.getShowTimeData(value.premiere_id)
+      }
+
       client.setex(
         `getpremiere:${JSON.stringify(req.query)}`,
         3600,
         JSON.stringify(result)
       )
+
       return helper.response(res, 200, 'Succes Get Data', result)
     } catch (error) {
       return helper.response(res, 400, 'Bad Request', error)
@@ -25,7 +30,6 @@ module.exports = {
       const result = await premiereModel.getDataById(id)
 
       // kondisi cek data di dalam database ada berdasarkan id..
-      console.log(result)
       if (result.length > 0) {
         client.set(`getpremiere:${id}`, JSON.stringify(result))
         return helper.response(res, 200, 'Succes Get Data By Id', result)
@@ -38,16 +42,15 @@ module.exports = {
   },
   postPremiere: async (req, res) => {
     try {
-      console.log(req.body)
       const { movieId, locationId, premiereName, premierePrice } = req.body
-      const setData = {
+      const setDataPremiere = {
         movie_id: movieId,
         location_id: locationId,
         premiere_name: premiereName,
         premiere_price: premierePrice,
         premiere_image: req.file ? req.file.filename : ''
       }
-      const result = await premiereModel.createData(setData)
+      const result = await premiereModel.createData(setDataPremiere)
       return helper.response(res, 200, 'Succes Create Data Premiere', result)
     } catch (error) {
       return helper.response(res, 400, 'Bad Request', error)
@@ -57,36 +60,26 @@ module.exports = {
     try {
       const { id } = req.params
       // kondisi cek data di dalam database ada berdasarkan id..
-
-      console.log(req.body)
       const { movieId, locationId, premiereName, premierePrice } = req.body
       const setData = {
         movie_id: movieId,
         location_id: locationId,
         premiere_name: premiereName,
         premiere_price: premierePrice,
-        premiere_image: req.file ? req.file.filename : ''
+        premiere_image: req.file ? req.file.filename : '',
+        premiere_updated_at: new Date(Date.now())
       }
-      const result = await premiereModel.updateData(setData, id)
+
       const getDataById = await premiereModel.getDataById(id)
       if (getDataById.length > 0) {
-        fs.stat(
-          `src/uploads/${getDataById[0].premiere_image}`,
-          function (err, stats) {
-            console.log(stats) // here we got all information of file in stats variable
-            if (err) {
-              return console.error(err)
-            }
-            fs.unlink(
-              `src/uploads/${getDataById[0].premiere_image}`,
-              function (err) {
-                if (err) return console.log(err)
-                console.log('file deleted successfully')
-              }
-            )
-          }
-        )
-
+        if (req.file) {
+          fs.unlink(`src/uploads/${getDataById[0].premiere_image}`, (error) => {
+            error
+              ? console.log('Image not found')
+              : console.log('Image deleted')
+          })
+        }
+        const result = await premiereModel.updateData(setData, id)
         return helper.response(res, 200, 'Succes Update Data Premiere', result)
       } else {
         return helper.response(res, 404, `Data By Id ${id} Not Found`, null)
@@ -103,22 +96,15 @@ module.exports = {
       console.log(result)
       // kondisi cek data di dalam database ada berdasarkan id..
       if (getDataById.length > 0) {
-        fs.stat(
-          `src/uploads/${getDataById[0].premiere_image}`,
-          function (err, stats) {
-            console.log(stats) // here we got all information of file in stats variable
-            if (err) {
-              return console.error(err)
-            }
-            fs.unlink(
-              `src/uploads/${getDataById[0].premiere_image}`,
-              function (err) {
-                if (err) return console.log(err)
-                console.log('file deleted successfully')
-              }
-            )
-          }
-        )
+        const imageToDelete = getDataById[0].premiere_image
+        const isImageExist = fs.existsSync(`src/uploads/${imageToDelete}`)
+
+        if (isImageExist && imageToDelete) {
+          fs.unlink(`src/uploads/${imageToDelete}`, (err) => {
+            if (err) throw err
+          })
+        }
+
         return helper.response(
           res,
           200,

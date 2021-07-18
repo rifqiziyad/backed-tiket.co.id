@@ -44,15 +44,18 @@ module.exports = {
   },
   postTime: async (req, res) => {
     try {
-      console.log(req.body)
-      const { premiereId, showTimeDate, showTimeClock } = req.body
-      const setData = {
-        premiere_id: premiereId,
-        show_time_date: showTimeDate,
-        show_time_clock: showTimeClock
+      const { showtimes } = req.body
+
+      let result
+      for (const showtime of showtimes) {
+        result = await timeModel.createData({
+          premiere_id: showtime.premiereId,
+          show_time_date: showtime.showTimeDate,
+          show_time_clock: showtime.showTimeClock
+        })
       }
-      const result = await timeModel.createData(setData)
       return helper.response(res, 200, 'Succes Create Time', result)
+      // const result = await timeModel.createData(setData)
     } catch (error) {
       return helper.response(res, 400, 'Bad Request', error)
     }
