@@ -9,6 +9,7 @@ const authRouter = require('../modules/auth/auth_routes')
 const userRouter = require('../modules/user/user_routes')
 const profileRouter = require('../modules/Profile/profile_routes')
 const filterRouter = require('../modules/dashboard filter/filter_routes')
+const orderRouter = require('../modules/orders/orders_routes')
 // [1]
 // Route.get('/hello', (req, res) => {
 //   res.status(200).send('Hello World')
@@ -24,5 +25,6 @@ Route.use('/auth', authRouter)
 Route.use('/user', userRouter)
 Route.use('/profile', profileRouter)
 Route.use('/filter', filterRouter)
+Route.use('/orders', orderRouter)
 
 module.exports = Route

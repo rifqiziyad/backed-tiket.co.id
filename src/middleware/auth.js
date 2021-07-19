@@ -26,7 +26,6 @@ module.exports = {
   isAdmin: (req, res, next) => {
     console.log('middleware isAdmin running !')
     const checkUserRole = req.decodeToken.user_role
-    console.log(checkUserRole)
     // check kondisi apakah user admin atau bukan ?
     if (checkUserRole === 1) {
       next()
