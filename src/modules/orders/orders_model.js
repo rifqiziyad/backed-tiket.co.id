@@ -26,5 +26,15 @@ module.exports = {
         }
       })
     })
+  },
+  dataForChart: (movieName, premiereName, locationName) => {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        `SELECT DATE(order_created_at) AS date, SUM(order_price) AS data FROM orders WHERE order_movie_name LIKE '%${movieName}%' AND order_premiere_name LIKE '%${premiereName}%' AND order_location LIKE '%${locationName}%' AND YEAR(order_created_at) = YEAR(NOW()) GROUP BY MONTH(order_created_at)`,
+        (error, result) => {
+          !error ? resolve(result) : reject(new Error(error))
+        }
+      )
+    })
   }
 }

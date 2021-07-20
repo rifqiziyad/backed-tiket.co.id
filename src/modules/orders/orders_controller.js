@@ -49,7 +49,28 @@ module.exports = {
       const result = await orderModel.createData(setData)
       return helper.response(res, 200, 'Success Create Order Data', result)
     } catch (error) {
-      console.log(error)
+      return helper.response(res, 400, 'Bad Request', error)
+    }
+  },
+  orderChart: async (req, res) => {
+    try {
+      let { movieName, premiereName, locationName } = req.query
+      if (movieName === undefined) {
+        movieName = ''
+      }
+      if (premiereName === undefined) {
+        premiereName = ''
+      }
+      if (locationName === undefined) {
+        locationName = ''
+      }
+      const result = await orderModel.dataForChart(
+        movieName,
+        premiereName,
+        locationName
+      )
+      return helper.response(res, 200, 'Success Get Order Data', result)
+    } catch (error) {
       return helper.response(res, 400, 'Bad Request', error)
     }
   }

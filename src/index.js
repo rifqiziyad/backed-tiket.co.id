@@ -23,10 +23,10 @@ app.use(bodyParser.json())
 app.use('/backend1/api/v1', routerNavigation)
 app.use('/backend1/api', express.static('src/uploads'))
 
-// app.post('/movie', (req, res) => {
-//   console.log('Post Movie Works !')
+// app.get('/movie', (req, res) => {
+//   console.log('Get Movie Works !')
 //   console.log(req.body)
-//   // res.status().send('Hello World')
+//   res.status().send('Hello World')
 // })
 
 app.listen(port, () => {
