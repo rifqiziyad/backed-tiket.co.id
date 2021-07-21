@@ -6,9 +6,7 @@ const Route = express.Router()
 const movieController = require('./movie_controller')
 const authMiddleware = require('../../middleware/auth')
 const uploadFile = require('../../middleware/uploads')
-// ==========================
 const redisMiddleware = require('../../middleware/redisMovie')
-// const { isAdmin } = require('../../middleware/auth')
 // ==========================
 // 1
 // Route.get('/hello', sayHello)

@@ -11,10 +11,21 @@ module.exports = {
   getAllMovie: async (req, res) => {
     try {
       let { page, limit, search, sort } = req.query
+      if (page === undefined) {
+        page = 1
+      }
+      if (limit === undefined) {
+        limit = 4
+      }
+      if (search === undefined) {
+        search = ''
+      }
+      if (sort === undefined) {
+        sort = 'movie_id ASC'
+      }
       page = parseInt(page)
       limit = parseInt(limit)
-      const totalData = await movieModel.getDataCount()
-      // console.log(totalData)
+      const totalData = await movieModel.getDataCount(search)
       const totalPage = Math.ceil(totalData / limit)
       const offset = page * limit - limit
 
@@ -116,16 +127,15 @@ module.exports = {
       const result = await movieModel.updateData(setData, id)
       if (checkId.length > 0) {
         client.set(`getmovie:${id}`, JSON.stringify(result))
-        fs.stat(`src/uploads/${checkId[0].movie_image}`, function (err, stats) {
-          console.log(stats) // here we got all information of file in stats variable
-          if (err) {
-            return console.error(err)
-          }
-          fs.unlink(`src/uploads/${checkId[0].movie_image}`, function (err) {
-            if (err) return console.log(err)
-            console.log('file deleted successfully')
+
+        const imageToDelete = checkId[0].movie_image
+        const isImageExist = fs.existsSync(`src/uploads/${imageToDelete}`)
+
+        if (isImageExist && imageToDelete) {
+          fs.unlink(`src/uploads/${imageToDelete}`, (err) => {
+            if (err) throw err
           })
-        })
+        }
         return helper.response(
           res,
           200,
@@ -147,12 +157,10 @@ module.exports = {
       const { id } = req.params
       const checkId = await movieModel.getDataById(id)
       const result = await movieModel.deleteData(id)
-      console.log(checkId[0].movie_image)
       // kondisi cek data di dalam database ada berdasarkan id..
       if (checkId.length > 0) {
-        console.log(`Delete data by id = ${id}`)
         fs.stat(`src/uploads/${checkId[0].movie_image}`, function (err, stats) {
-          console.log(stats) // here we got all information of file in stats variable
+          // console.log(stats) // here we got all information of file in stats variable
           if (err) {
             return console.error(err)
           }

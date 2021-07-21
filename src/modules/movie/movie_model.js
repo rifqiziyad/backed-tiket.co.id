@@ -13,10 +13,10 @@ module.exports = {
       )
     })
   },
-  getDataCount: () => {
+  getDataCount: (search) => {
     return new Promise((resolve, reject) => {
       connection.query(
-        'SELECT COUNT(*) AS total FROM movie',
+        `SELECT COUNT(*) AS total FROM movie WHERE movie_name LIKE '%${search}%'`,
         (error, result) => {
           !error ? resolve(result[0].total) : reject(new Error(error))
         }

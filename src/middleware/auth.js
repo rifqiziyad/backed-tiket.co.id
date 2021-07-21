@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken')
 
 module.exports = {
   authentication: (req, res, next) => {
+    console.log('Middleware authentication is running')
     let token = req.headers.authorization
     if (token) {
       token = token.split(' ')[1]
@@ -24,7 +25,7 @@ module.exports = {
     }
   },
   isAdmin: (req, res, next) => {
-    console.log('middleware isAdmin running !')
+    console.log('Middleware isAdmin running !')
     const checkUserRole = req.decodeToken.user_role
     // check kondisi apakah user admin atau bukan ?
     if (checkUserRole === 1) {

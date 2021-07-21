@@ -39,6 +39,7 @@ module.exports = {
     })
   },
   clearDataMovieRedis: (req, res, next) => {
+    console.log('Middleware clear redis movie is running')
     // proses pertama, cari kunci yg berawalan getmovie
     client.keys('getmovie*', (_error, result) => {
       console.log(result) // berbentuk array ex: ['getmovie:1', 'getmovie:{page limit ...}']
