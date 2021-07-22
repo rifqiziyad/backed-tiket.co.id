@@ -1,7 +1,6 @@
 const helper = require('../../helpers/wrapper')
 const timeModel = require('./time_model')
-const redis = require('redis')
-const client = redis.createClient()
+const client = require('../../config/redis')
 
 module.exports = {
   getAllTime: async (req, res) => {

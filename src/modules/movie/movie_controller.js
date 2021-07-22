@@ -1,7 +1,6 @@
 const helper = require('../../helpers/wrapper')
 const movieModel = require('./movie_model')
-const redis = require('redis')
-const client = redis.createClient()
+const client = require('../../config/redis')
 const fs = require('fs')
 
 module.exports = {

@@ -1,7 +1,6 @@
 const helper = require('../../helpers/wrapper')
 const profileModel = require('./profile_model')
-const redis = require('redis')
-const client = redis.createClient()
+const client = require('../../config/redis')
 const fs = require('fs')
 
 module.exports = {
@@ -28,12 +27,8 @@ module.exports = {
   updateProfile: async (req, res) => {
     try {
       const { id } = req.params
-      const {
-        userFirstName,
-        userlastName,
-        userEmail,
-        userPhoneNumber
-      } = req.body
+      const { userFirstName, userlastName, userEmail, userPhoneNumber } =
+        req.body
       const setData = {
         user_name: userFirstName,
         user_last_name: userlastName,

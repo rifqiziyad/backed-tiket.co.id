@@ -1,7 +1,6 @@
 const helper = require('../../helpers/wrapper')
 const bookingModel = require('./booking_model')
-const redis = require('redis')
-const client = redis.createClient()
+const client = require('../../config/redis')
 
 module.exports = {
   getAllBooking: async (req, res) => {
