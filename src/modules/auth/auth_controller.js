@@ -37,7 +37,7 @@ module.exports = {
           from: '"Sans 😂👌" <rifqiziyad4@gmail.com>', // sender address
           to: userEmail, // list of receivers
           subject: 'Ticket Sans - Activation Email', // Subject line
-          html: `<b>Click Here to activate account </b><a href='http://localhost:3001/backend1/api/v1/user/patch/${result.id}'>Click here !</a>` // html body
+          html: `<b>Click Here to activate account </b><a href='https://ticket-sans.herokuapp.com/backend1/api/v1/user/patch/${result.id}'>Click here !</a>` // html body
         }
 
         await transporter.sendMail(mailOptions, function (error, info) {
