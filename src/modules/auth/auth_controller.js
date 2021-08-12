@@ -46,21 +46,21 @@ module.exports = {
             return helper.response(res, 400, 'Email not send !')
           } else {
             console.log('Email sent:' + info.response)
+            delete result.user_password
+            return helper.response(
+              res,
+              200,
+              'Success register account \n check your email for verification',
+              result
+            )
           }
         })
-
-        delete result.user_password
-        return helper.response(
-          res,
-          200,
-          'Success register account \n check your email for verification',
-          result
-        )
       } else {
         // jika ada response gagal msg = email sudah terdaftar
         return helper.response(res, 404, `${userEmail} Registered`)
       }
     } catch (error) {
+      console.log(error)
       return helper.response(res, 400, 'Bad Request', error)
     }
   },

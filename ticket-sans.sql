@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 22, 2021 at 09:10 AM
+-- Generation Time: Aug 12, 2021 at 03:10 PM
 -- Server version: 10.4.18-MariaDB
 -- PHP Version: 7.3.27
 
@@ -84,19 +84,6 @@ INSERT INTO `booking_seat` (`booking_seat_id`, `booking_id`, `booking_seat_locat
 (11, 4, 'A2'),
 (12, 13, 'F8'),
 (13, 10, 'C1');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `e-mail`
---
-
-CREATE TABLE `e-mail` (
-  `profile_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `profile_first_name` int(11) NOT NULL,
-  `profile_last_name` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -305,11 +292,11 @@ CREATE TABLE `user` (
   `user_name` varchar(150) NOT NULL,
   `user_email` varchar(150) NOT NULL,
   `user_password` varchar(250) NOT NULL,
-  `user_last_name` varchar(100) NOT NULL,
-  `user_phone_number` varchar(15) NOT NULL,
-  `user_image` varchar(100) NOT NULL,
+  `user_last_name` varchar(100) DEFAULT NULL,
+  `user_phone_number` varchar(15) DEFAULT NULL,
+  `user_image` varchar(100) DEFAULT NULL,
   `user_created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `user_updated_at` datetime NOT NULL
+  `user_updated_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -321,7 +308,8 @@ INSERT INTO `user` (`user_id`, `user_role`, `user_status`, `user_name`, `user_em
 (76, 0, 100, 'Rifqi', 'yegocix260@eyeremind.com', '$2b$10$MZmlq4XAy6AcoSToHvSnH.FReQuAKS6i7ZcNxDk9EkY5TbhCENROq', '', '', '', '2021-07-17 16:41:24', '0000-00-00 00:00:00'),
 (77, 0, 99, 'Rifqi', 'cocavow855@nhmty.com', '$2b$10$efLsfoSwIt2RxOZIADklI.rKHUqqnE6fwQ0ataxn6cwamDkFruCU.', '', '', '', '2021-07-21 03:22:24', '0000-00-00 00:00:00'),
 (78, 0, 100, 'Rifqi', 'cajawah534@dmsdmg.com', '$2b$10$IDauMDTS/XLnW8B58h5RjOmXsd3Jzo9j9qXAmxbxIUAn9hMW4EpI.', '', '', '', '2021-07-21 03:23:21', '0000-00-00 00:00:00'),
-(79, 0, 99, 'test', 'admin@admin.com', '$2b$10$/Lyn7YDIm6LXp6VT6ZIi2Ow18KACzFPBq930hSynuKfcA.YNbBei6', '', '', '', '2021-07-22 06:47:00', '0000-00-00 00:00:00');
+(79, 0, 99, 'test', 'admin@admin.com', '$2b$10$/Lyn7YDIm6LXp6VT6ZIi2Ow18KACzFPBq930hSynuKfcA.YNbBei6', '', '', '', '2021-07-22 06:47:00', '0000-00-00 00:00:00'),
+(80, 0, 99, 'Rifqi', 'vivapo5602@cfcjy.com', '$2b$10$fu6OhCII7V9aZ7PZ4C2kJevF4orPSvQjySckqzMXKbA0Edf43vBxu', '', '', '', '2021-08-12 13:03:43', '0000-00-00 00:00:00');
 
 --
 -- Indexes for dumped tables
@@ -425,7 +413,7 @@ ALTER TABLE `show_time`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=80;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=81;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
